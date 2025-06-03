@@ -76,7 +76,7 @@
             background-color: #1565c0;
         }
 
-        @media (max-widht: 600px) {
+        @media (max-width: 600px) {
             h1 {
                 font-size: 28px;
             }
@@ -176,22 +176,22 @@
                 .then((userCredential) => {
                     userId = userCredential.user.uid;
                     userStatus.textContent = `Вітаю з поверненням, ${email.value}!`;
-                    loadSoberDays();
+                    loadSoberLog();
                 })
                 .catch((error) => {
                     alert("Помилка входу: " + error.message);
                 });
+                
         });
 
-        function loadSoberDays() {
-            if (!userId) return;
-            get(ref(db, `users/${userId}/soberDays`)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    soberDays = snapshot.val();
-                    daysEl.textContent = soberDays;
-                } else {
-                    soberDays = 0;
-                    daysEl.textContent = soberDays;
+        function loadSoberLog(){
+            if(!userId) return;
+            get(ref(db, `users/${userId}/log`)).then((snapshot) => {
+                if (snapshot.exists()){
+                    const log = snapshot.val();
+                    updateStats(log);
+                }else {
+                    daysEl.textContent = 0;
                 }
             });
         }
@@ -201,10 +201,40 @@
                 alert("Спершу увійди!");
                 return;
             }
-            soberDays++;
-            set(ref(db, `users/${userId}/soberDays`), soberDays);
-            daysEl.textContent = soberDays;
+//Розширимо збереження
+            const today = new Date().toISOString().split('T')[0]; //формат YYYY-MM-DD
+
+            get(ref(db, `users/${userId}/log`)).then((snapshot) => {
+                let log = snapshot.val() || [];
+
+                if(!log.includes(today)) {
+                    log.push(today);
+                    set(ref(db, `users/${userId}/log`), log);
+                    updateStats(log);
+                }else{
+                    alert("Ти вже натискав сьогодні!");
+                }
+            });
         });
+
+        //Функція для оновлення статистики
+        function updateStats(log) {
+            log.sort(); 
+            daysEl.textContent = log.length;
+
+            const lastDate = log[log.length - 1];
+            const quote = getMotivationQuote(log.length);
+            quoteEl.textContent = `"${quote}"`;
+        }
+
+        // Мотиваційні рівні
+        function getMotivationQuote(days){
+            if(days < 3) return "Перші кроки - найважчі, але ти вже йдеш!";
+            if(days < 7) return "Ти вже тиждень герой! Продовжуй!";
+            if(days < 30) return "Ти машина сили! Скоро місяць!";
+            if(days < 100) return "Твої дні - як золото!";
+            return "Ти легенда! Приклад для інших!"
+        }
 
     </script>
 
