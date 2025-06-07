@@ -1,0 +1,70 @@
+body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #121212;
+            color: #e0f2f1;
+            text-align: center;
+            padding: 40px;
+            margin: 0;
+        }
+
+
+        h1 {
+            color: #2e7d32;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 24px;
+            color: #e0f2f1;
+        }
+
+        blockquote {
+            font-style: italic;
+            color: #00796d;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1565c0;
+        }
+
+        #soberChart {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            p {
+                font-size: 20px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 12px 24px;
+            }
+
+            blockquote {
+                font-size: 16px;
+                margin: 10px auto;
+                padding: 10px;
+            }
+        }
